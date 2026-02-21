@@ -1,6 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { useMemo, useState } from "react";
+import { cn } from "@/lib/utils";
 
 type TestRecord = {
     date: string; // ISO date
@@ -46,15 +45,16 @@ export const MockTestPerformance = () => {
     const pathD = points.map((p, i) => `${i === 0 ? "M" : "L"} ${p[0].toFixed(2)} ${p[1].toFixed(2)}`).join(" ");
 
     return (
-        <Card className="p-4 border-none shadow-sm rounded-3xl bg-white">
-            <CardHeader className="pt-0 pb-2">
-                <CardTitle className="text-[16px] font-bold">Mock Test Performance</CardTitle>
-            </CardHeader>
-            <CardContent className="p-4">
-                <div className="flex items-center gap-2 mb-3">
-                    <Button variant={view === "overall" ? "default" : "ghost"} size="sm" onClick={() => setView("overall")}>Overall</Button>
-                    <Button variant={view === "rw" ? "default" : "ghost"} size="sm" onClick={() => setView("rw")}>Reading &amp; Writing</Button>
-                    <Button variant={view === "math" ? "default" : "ghost"} size="sm" onClick={() => setView("math")}>Math</Button>
+        <div className="rounded-3xl bg-white p-5">
+            <div className="mb-4">
+                <h2 className="text-[20px] font-bold tracking-tight text-[#1D1D1F]">Mock Test Performance</h2>
+                <p className="text-sm text-[#75757A] mt-1">Track your scores over time</p>
+            </div>
+            <div className="px-1">
+                <div className="flex items-center gap-2 mb-4">
+                    <button onClick={() => setView("overall")} className={cn("px-4 py-1.5 text-sm font-medium rounded-full transition-colors", view === "overall" ? "bg-accent text-white" : "text-[#75757A] hover:bg-[#f5f5f7]")}>Overall</button>
+                    <button onClick={() => setView("rw")} className={cn("px-4 py-1.5 text-sm font-medium rounded-full transition-colors", view === "rw" ? "bg-accent text-white" : "text-[#75757A] hover:bg-[#f5f5f7]")}>Reading &amp; Writing</button>
+                    <button onClick={() => setView("math")} className={cn("px-4 py-1.5 text-sm font-medium rounded-full transition-colors", view === "math" ? "bg-accent text-white" : "text-[#75757A] hover:bg-[#f5f5f7]")}>Math</button>
                 </div>
 
                 <div>
@@ -85,14 +85,14 @@ export const MockTestPerformance = () => {
 
                                 {/* x labels */}
                                 {tests.map((t, i) => (
-                                    <text key={i} x={points[i][0]} y={svgHeight - 6} textAnchor="middle" fontSize={10} fill="#6b7280">{new Date(t.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</text>
+                                    <text key={i} x={points[i][0]} y={svgHeight - 6} textAnchor="middle" fontSize={10} fill="#6b7280">{new Date(t.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</text>
                                 ))}
                             </svg>
                         </div>
                     )}
                 </div>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     );
 };
 

@@ -36,7 +36,7 @@ export const useProfile = () => {
         if (error) {
           console.error("Error fetching profile:", error);
         } else if (mounted) {
-          setProfile(data as Profile);
+          setProfile(data as unknown as Profile);
         }
       } catch (error) {
         console.error("Error in getProfile:", error);
