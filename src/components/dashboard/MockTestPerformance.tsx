@@ -46,16 +46,14 @@ export const MockTestPerformance = () => {
 
     return (
         <div className="rounded-3xl bg-white p-5">
-            <div className="mb-4">
+            <div className="flex items-center justify-between mb-4">
                 <h2 className="text-[20px] font-bold tracking-tight text-[#1D1D1F]">Mock Test Performance</h2>
-                <p className="text-sm text-[#75757A] mt-1">Track your scores over time</p>
-            </div>
-            <div className="px-1">
-                <div className="flex items-center gap-2 mb-4">
+                <div className="flex items-center gap-2">
                     <button onClick={() => setView("overall")} className={cn("px-4 py-1.5 text-sm font-medium rounded-full transition-colors", view === "overall" ? "bg-accent text-white" : "text-[#75757A] hover:bg-[#f5f5f7]")}>Overall</button>
                     <button onClick={() => setView("rw")} className={cn("px-4 py-1.5 text-sm font-medium rounded-full transition-colors", view === "rw" ? "bg-accent text-white" : "text-[#75757A] hover:bg-[#f5f5f7]")}>Reading &amp; Writing</button>
                     <button onClick={() => setView("math")} className={cn("px-4 py-1.5 text-sm font-medium rounded-full transition-colors", view === "math" ? "bg-accent text-white" : "text-[#75757A] hover:bg-[#f5f5f7]")}>Math</button>
                 </div>
+            </div>
 
                 <div>
                     {tests.length === 0 ? (
@@ -91,7 +89,6 @@ export const MockTestPerformance = () => {
                         </div>
                     )}
                 </div>
-            </div>
         </div>
     );
 };
