@@ -1,73 +1,30 @@
-# Welcome to your Lovable project
+﻿# Spongia - Master the Digital SAT
 
-## Project info
+Spongia is a comprehensive SAT preparation platform designed to help students ace the Digital SAT. It features AI-generated questions, in-depth performance tracking, and a 1:1 exam simulator.
 
-**URL**: https://lovable.dev/projects/65c2f9ed-16cc-427a-af29-7a59108fd09a
+## Features
 
-## How can I edit this code?
+- **Practice**: Access realistic practice questions covering all SAT domains.
+- **AI-Powered Learning**: Get personalized question recommendations and explanations. (to be added)
+- **Skill Tracking**: Visualize your progress with detailed analytics and mastery charts.
+- **Mock Exams**: Take full-length, timed practice tests to simulate test day (Pro). (to be added)
+- **Study Groups**: Collaborate with friends and peers to stay motivated. (in progress)
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+This project is built with the following web stack:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/65c2f9ed-16cc-427a-af29-7a59108fd09a) and start prompting.
+- **Frontend**: [React](https://react.dev/), [Vite](https://vitejs.dev/), [TypeScript](https://www.typescriptlang.org/)
+- **UI Framework**: [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/)
+- **Backend & Auth**: [Supabase](https://supabase.com/)
+- **Question Generation**: Python powered AI pipeline
 
-Changes made via Lovable will be committed automatically to this repo.
+## Project Structure
 
-**Use your preferred IDE**
+- src/pages: Main application pages (Dashboard, Skills, Pricing, etc.)
+- src/components: Reusable UI components
+- src/integrations/supabase: Supabase user authentication and database types
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## License
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/65c2f9ed-16cc-427a-af29-7a59108fd09a) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+This project is proprietary.
