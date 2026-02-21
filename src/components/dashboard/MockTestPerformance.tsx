@@ -24,7 +24,7 @@ export const MockTestPerformance = () => {
     const values = tests.map(t => (view === "overall" ? t.overall : view === "rw" ? t.rw : t.math));
 
     const svgWidth = 600;
-    const svgHeight = 160;
+    const svgHeight = 120;
     const paddingLeft = 48; // reserve space for y-axis labels
     const paddingRight = 18;
     const paddingY = 18;

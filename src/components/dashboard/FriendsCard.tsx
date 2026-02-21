@@ -1,47 +1,62 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { UserPlus, Users } from "lucide-react";
+import { Users, Trophy, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { useFriends } from "@/hooks/useFriends";
-import { Badge } from "@/components/ui/badge";
 
 export const FriendsCard = () => {
     const navigate = useNavigate();
-    const { myProfile, leaderboard } = useFriends();
+    const { leaderboard } = useFriends();
     
-    // Calculate rank among friends
     const rank = leaderboard.findIndex(e => e.isMe) + 1;
+    const topFriends = leaderboard.slice(0, 3);
 
     return (
-        <Card className="border-none shadow-sm bg-white rounded-3xl h-full flex flex-col">
-            <CardHeader className="flex flex-row items-center justify-between pt-5 pb-4">
-                <CardTitle className="text-[20px] font-bold text-[#1d1d1f] flex items-center gap-2">
-                    Social
-                </CardTitle>
-            </CardHeader>
-            <CardContent className="flex-1 flex flex-col justify-end pb-6">
-                <div className="flex flex-col gap-3">
-                    <div className="flex items-center justify-between">
-                         <div className="flex items-center gap-3">
-                            <span className="text-muted-foreground text-sm font-medium">Weekly Rank</span>
-                            <div className="flex items-center gap-1.5 text-[#1d1d1f]">
-                                <span className="font-bold text-lg">
-                                    {rank > 0 ? `#${rank}` : "--"}
-                                </span>
-                            </div>
-                         </div>
-                         <Button 
-                            variant="default" 
-                            size="sm"
-                            className="h-8 px-4 rounded-xl bg-[#324dc7] hover:bg-[#324dc7]/90 text-white font-semibold border-none"
-                            onClick={() => navigate("/friends")}
-                         >
-                            See More
-                         </Button>
-                    </div>
+        <div className="rounded-3xl bg-white p-5 h-full flex flex-col">
+            <div className="flex items-center justify-between mb-4">
+                <h2 className="text-[20px] font-bold tracking-tight text-[#1D1D1F]">Social</h2>
+                <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="text-sm text-[#75757A] hover:text-[#1D1D1F] gap-1 px-2"
+                    onClick={() => navigate("/friends")}
+                >
+                    See All <ArrowRight className="h-3.5 w-3.5" />
+                </Button>
+            </div>
+
+            {/* Rank badge */}
+            <div className="flex items-center gap-3 rounded-2xl bg-[#f5f5f7] px-4 py-3 mb-4">
+                <div className="h-9 w-9 rounded-xl bg-accent flex items-center justify-center">
+                    <Trophy className="h-4.5 w-4.5 text-white" />
                 </div>
-            </CardContent>
-        </Card>
+                <div>
+                    <p className="text-xs text-[#75757A]">Weekly Rank</p>
+                    <p className="text-lg font-bold text-[#1D1D1F] leading-tight">
+                        {rank > 0 ? `#${rank}` : "—"}
+                    </p>
+                </div>
+            </div>
+
+            {/* Mini leaderboard */}
+            <div className="flex-1 flex flex-col gap-2">
+                {topFriends.length > 0 ? topFriends.map((friend, i) => (
+                    <div key={i} className="flex items-center gap-3 px-1">
+                        <span className="text-xs font-semibold text-[#75757A] w-4">{i + 1}</span>
+                        <div className="h-7 w-7 rounded-full bg-[#f5f5f7] flex items-center justify-center">
+                            <Users className="h-3.5 w-3.5 text-[#75757A]" />
+                        </div>
+                        <span className="text-sm text-[#1D1D1F] flex-1 truncate">
+                            {friend.isMe ? "You" : (friend.username || friend.email || "Friend")}
+                        </span>
+                        <span className="text-xs font-medium text-[#75757A]">{friend.score} pts</span>
+                    </div>
+                )) : (
+                    <div className="flex-1 flex flex-col items-center justify-center text-center gap-2 py-2">
+                        <Users className="h-5 w-5 text-[#75757A]" />
+                        <p className="text-xs text-[#75757A]">Add friends to compete</p>
+                    </div>
+                )}
+            </div>
+        </div>
     );
 };
