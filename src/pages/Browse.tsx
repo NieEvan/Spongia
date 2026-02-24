@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Search, Play, Clock, X, Eye, EyeOff, ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -12,6 +13,9 @@ import { DifficultyBadge } from "@/components/ui/difficulty-badge";
 import { useFilteredQuestions, useQuestionStats } from "@/hooks/useQuestions";
 import { useProgress } from "@/hooks/useProgress";
 import { QuestionFilters } from "@/components/browse/QuestionFilters";
+import { usePaywall } from "@/hooks/usePaywall";
+import { Lock, Sparkles } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import {
   Popover,
   PopoverContent,
@@ -23,6 +27,8 @@ import { motion } from "framer-motion";
 const QUESTIONS_PER_PAGE = 5;
 
 const Browse = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const stats = useQuestionStats();
   const [filters, setFilters] = useState<FilterState>({
     domains: [],
@@ -43,6 +49,8 @@ const Browse = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const { progress, refresh } = useProgress();
   const [showUnattempted, setShowUnattempted] = useState(false);
+  const { isPaid, isLimitReached, remainingQuestions } = usePaywall();
+  const { toast } = useToast();
 
   const filteredQuestions = useFilteredQuestions(filters);
 
@@ -66,10 +74,18 @@ const Browse = () => {
 
   // Sync practice question counts to max available whenever filters/results change
   useEffect(() => {
-    const count = searchedQuestions.length;
-    setUntimedQuestionCount(count);
-    setTimedQuestionCount(count);
-  }, [searchedQuestions.length]);
+    const maxAvailable = searchedQuestions.length;
+    const finalLimit = isPaid ? maxAvailable : Math.min(maxAvailable, remainingQuestions);
+
+    setUntimedQuestionCount(prev => {
+      if (prev > finalLimit) return Math.max(1, finalLimit);
+      return prev || Math.min(10, finalLimit);
+    });
+    setTimedQuestionCount(prev => {
+      if (prev > finalLimit) return Math.max(1, finalLimit);
+      return prev || Math.min(10, finalLimit);
+    });
+  }, [searchedQuestions.length, isPaid, remainingQuestions]);
 
   // Pagination
   const totalPages = Math.ceil(searchedQuestions.length / QUESTIONS_PER_PAGE);
@@ -121,6 +137,27 @@ const Browse = () => {
     filters.domains.length + filters.skills.length + filters.difficulties.length;
 
   const startPractice = (timed: boolean, questionCount: number) => {
+    if (isLimitReached) {
+      toast({
+        title: "Daily Limit Reached",
+        description: "You've practiced 15 questions today. Upgrade to Plus for unlimited access!",
+        variant: "destructive",
+      });
+      navigate("/pricing");
+      return;
+    }
+
+    // Check if the requested number of questions exceeds the remaining quota for unpaid users
+    if (!isPaid && questionCount > remainingQuestions) {
+      toast({
+        title: "Daily Limit",
+        description: `You only have ${remainingQuestions} questions left for today. Upgrade for unlimited access!`,
+      });
+      // Adjust question count to remaining questions
+      questionCount = remainingQuestions;
+      if (questionCount <= 0) return;
+    }
+
     setIsStarting(true);
 
     // Small delay to show loading screen
@@ -238,6 +275,18 @@ const Browse = () => {
 
 
               {/* Practice Options */}
+              {!isPaid && (
+                <div className="mb-6 flex items-center justify-between p-4 bg-brand-blue/5 rounded-2xl border border-brand-blue/10">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-brand-blue" />
+                    <span className="text-sm font-semibold text-brand-black">Daily Practice Limit</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-sm font-bold text-brand-blue">{remainingQuestions}</span>
+                    <span className="text-sm font-medium text-brand-grey">questions left today</span>
+                  </div>
+                </div>
+              )}
               {searchedQuestions.length === 0 ? (
                 <Card className="p-12 text-center rounded-3xl">
                   <p className="text-brand-grey">
@@ -263,10 +312,11 @@ const Browse = () => {
                         <Input
                           type="number"
                           min={1}
-                          max={searchedQuestions.length}
+                          max={isPaid ? searchedQuestions.length : Math.min(searchedQuestions.length, remainingQuestions)}
                           value={untimedQuestionCount}
                           onChange={(e) => {
-                            const val = Math.max(1, Math.min(searchedQuestions.length, parseInt(e.target.value) || 1));
+                            const maxVal = isPaid ? searchedQuestions.length : Math.min(searchedQuestions.length, remainingQuestions);
+                            const val = Math.max(1, Math.min(maxVal, parseInt(e.target.value) || 1));
                             setUntimedQuestionCount(val);
                           }}
                           className="w-20 rounded-xl bg-brand-bg border-none ring-1 ring-brand-border hover:ring-2 hover:ring-brand-grey/50 focus:ring-2 focus:ring-brand-grey/50 focus:outline-none transition-all"
@@ -302,10 +352,11 @@ const Browse = () => {
                           <Input
                             type="number"
                             min={1}
-                            max={searchedQuestions.length}
+                            max={isPaid ? searchedQuestions.length : Math.min(searchedQuestions.length, remainingQuestions)}
                             value={timedQuestionCount}
                             onChange={(e) => {
-                              const val = Math.max(1, Math.min(searchedQuestions.length, parseInt(e.target.value) || 1));
+                              const maxVal = isPaid ? searchedQuestions.length : Math.min(searchedQuestions.length, remainingQuestions);
+                              const val = Math.max(1, Math.min(maxVal, parseInt(e.target.value) || 1));
                               setTimedQuestionCount(val);
                             }}
                             className="w-20 rounded-xl bg-brand-bg border-none ring-1 ring-brand-border hover:ring-2 hover:ring-brand-grey/50 focus:ring-2 focus:ring-brand-grey/50 focus:outline-none transition-all"
@@ -346,12 +397,23 @@ const Browse = () => {
 
               {/* Show Questions Button */}
               {searchedQuestions.length > 0 && (
-                <div className="mt-8 flex justify-center">
+                <div className="mt-8 flex flex-col items-center gap-4">
                   <Button
                     variant="outline"
-                    onClick={() => setShowQuestions(!showQuestions)}
-                    className="gap-2 rounded-xl border-2 bg-white hover:bg-neutral-50 hover:text-brand-black hover:border-brand-border hover:scale-[1.02] active:scale-95 transition-all duration-200 transform-gpu min-w-[200px] text-base font-medium text-brand-grey shadow-sm"
+                    onClick={() => {
+                      if (!isPaid) {
+                        toast({
+                          title: "Premium Feature",
+                          description: "Viewing questions list is only available for Plus and Pro members.",
+                        });
+                        navigate("/pricing");
+                        return;
+                      }
+                      setShowQuestions(!showQuestions);
+                    }}
+                    className={`gap-2 rounded-xl border-2 bg-white hover:bg-neutral-50 hover:text-brand-black hover:border-brand-border hover:scale-[1.02] active:scale-95 transition-all duration-200 transform-gpu min-w-[200px] text-base font-medium shadow-sm ${!isPaid ? "text-brand-grey/50 border-brand-border/50" : "text-brand-grey"}`}
                   >
+                    {!isPaid && <Lock className="h-4 w-4" />}
                     {showQuestions ? (
                       <>
                         <EyeOff className="h-4 w-4" />
@@ -364,6 +426,12 @@ const Browse = () => {
                       </>
                     )}
                   </Button>
+                  {!isPaid && (
+                    <p className="text-xs text-brand-grey font-medium flex items-center gap-1">
+                      <Sparkles className="h-3 w-3 text-brand-blue" />
+                      Unlock this feature with Sponge Plus
+                    </p>
+                  )}
                 </div>
               )}
 

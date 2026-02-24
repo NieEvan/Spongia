@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Search, X, ChevronDown, ChevronUp } from "lucide-react";
+import { Search, X, ChevronDown, ChevronUp, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { FilterState } from "@/types/sat";
+import { usePaywall } from "@/hooks/usePaywall";
 
 interface QuestionFiltersProps {
     filters: FilterState;
@@ -24,6 +25,7 @@ interface QuestionFiltersProps {
 }
 
 export const QuestionFilters = ({ filters, onFilterChange, stats, showUnattempted, onShowUnattemptedChange, searchQuery, onSearchQueryChange }: QuestionFiltersProps) => {
+    const { isPaid } = usePaywall();
     const [openSubjects, setOpenSubjects] = useState<string[]>([]);
 
     const toggleFilter = (type: keyof FilterState, value: string) => {
@@ -220,10 +222,18 @@ export const QuestionFilters = ({ filters, onFilterChange, stats, showUnattempte
 
             {/* Subject Areas */}
             <div className="space-y-3">
-                <label className="text-sm font-bold text-brand-grey select-none">
-                    Subject Areas & Topics
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-x-6 gap-y-4">
+                <div className="flex items-center gap-2">
+                    <label className="text-sm font-bold text-brand-grey select-none">
+                        Subject Areas & Topics
+                    </label>
+                    {!isPaid && (
+                        <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-brand-blue/10 text-brand-blue border border-brand-blue/20">
+                            <Lock className="h-3 w-3" />
+                            <span className="text-[10px] font-bold uppercase tracking-wider">Advanced</span>
+                        </div>
+                    )}
+                </div>
+                <div className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-x-6 gap-y-4 ${!isPaid ? "opacity-50 pointer-events-none grayscale-[0.5]" : ""}`}>
                     {stats.subject_areas.map((subject) => {
                         const isSubjectSelected = filters.subject_areas.includes(subject);
                         const isExpanded = openSubjects.includes(subject);
@@ -301,10 +311,18 @@ export const QuestionFilters = ({ filters, onFilterChange, stats, showUnattempte
 
             {/* Search */}
             <div className="space-y-2">
-                <label className="text-sm font-bold text-brand-grey select-none">
-                    Search Keywords
-                </label>
-                <div className="relative">
+                <div className="flex items-center gap-2">
+                    <label className="text-sm font-bold text-brand-grey select-none">
+                        Search Keywords
+                    </label>
+                    {!isPaid && (
+                        <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-brand-blue/10 text-brand-blue border border-brand-blue/20">
+                            <Lock className="h-3 w-3" />
+                            <span className="text-[10px] font-bold uppercase tracking-wider">Advanced</span>
+                        </div>
+                    )}
+                </div>
+                <div className={`relative ${!isPaid ? "opacity-50 pointer-events-none grayscale-[0.5]" : ""}`}>
                     <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-grey" />
                     <Input
                         placeholder="Search specific keywords in questions..."

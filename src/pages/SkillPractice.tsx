@@ -1,7 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, Clock, Play } from "lucide-react";
+import { ArrowLeft, Clock, Play, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +14,8 @@ import { useQuestionsBySkill } from "@/hooks/useQuestions";
 import { useProgressStats } from "@/hooks/useProgress";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { usePaywall } from "@/hooks/usePaywall";
+import { useToast } from "@/hooks/use-toast";
 import type { SATQuestion } from "@/types/sat";
 
 const SkillPractice = () => {
@@ -22,6 +24,8 @@ const SkillPractice = () => {
   const { skillSlug } = useParams();
 
   const { skill = "", domain = "" } = (location.state as { skill?: string; domain?: string }) || {};
+  const { isPaid, isLimitReached, remainingQuestions } = usePaywall();
+  const { toast } = useToast();
 
   const allSkillQuestions = useQuestionsBySkill(skill);
   const { results, skillRecentStats, refresh: refreshProgress } = useProgressStats();
@@ -64,7 +68,41 @@ const SkillPractice = () => {
   const skillRecent = skillRecentStats[skill] || { accuracy: 0, total: 0 };
   const recentAccuracy = skillRecent.accuracy;
 
+  // Sync practice question counts to max available for unpaid users
+  useEffect(() => {
+    const maxAvailable = questions.length;
+    const finalLimit = isPaid ? maxAvailable : Math.min(maxAvailable, remainingQuestions);
+
+    setUntimedQuestionCount(prev => {
+      if (prev > finalLimit) return Math.max(1, finalLimit);
+      return prev || Math.min(10, finalLimit);
+    });
+    setTimedQuestionCount(prev => {
+      if (prev > finalLimit) return Math.max(1, finalLimit);
+      return prev || Math.min(10, finalLimit);
+    });
+  }, [questions.length, isPaid, remainingQuestions]);
+
   const startPractice = (timed: boolean, questionCount: number, shuffle: boolean = true) => {
+    if (isLimitReached) {
+      toast({
+        title: "Daily Limit Reached",
+        description: "You've practiced 15 questions today. Upgrade to Plus for unlimited access!",
+        variant: "destructive",
+      });
+      navigate("/pricing");
+      return;
+    }
+
+    if (!isPaid && questionCount > remainingQuestions) {
+      toast({
+        title: "Daily Limit",
+        description: `You only have ${remainingQuestions} questions left for today. Upgrade for unlimited access!`,
+      });
+      questionCount = remainingQuestions;
+      if (questionCount <= 0) return;
+    }
+
     setIsStarting(true);
 
     // Small delay to show loading screen
@@ -213,7 +251,21 @@ const SkillPractice = () => {
 
           {/* Practice Options */}
           <div>
-            <h2 className="text-2xl font-bold text-brand-black mb-6">Start Practice</h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-brand-black">Start Practice</h2>
+              {!isPaid && (
+                <div className="flex items-center gap-4 px-4 py-2 bg-brand-blue/5 rounded-2xl border border-brand-blue/10">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-brand-blue" />
+                    <span className="text-sm font-semibold text-brand-black">Daily Limit</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 h-6 bg-brand-blue/10 px-2 rounded-lg">
+                    <span className="text-sm font-bold text-brand-blue">{remainingQuestions}</span>
+                    <span className="text-xs font-medium text-brand-blue/80">left</span>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {questions.length === 0 ? (
               <Card className="p-10 border-none shadow-sm rounded-3xl bg-white text-center">
@@ -259,11 +311,12 @@ const SkillPractice = () => {
                       <Input
                         type="number"
                         min={1}
-                        max={Math.min(100, questions.length)}
+                        max={isPaid ? questions.length : Math.min(questions.length, remainingQuestions)}
                         value={untimedQuestionCount}
                         onChange={(e) => {
-                          const val = Math.max(1, Math.min(100, parseInt(e.target.value) || 1));
-                          setUntimedQuestionCount(Math.min(val, questions.length));
+                          const maxVal = isPaid ? questions.length : Math.min(questions.length, remainingQuestions);
+                          const val = Math.max(1, Math.min(maxVal, parseInt(e.target.value) || 1));
+                          setUntimedQuestionCount(val);
                         }}
                         className="w-20 rounded-xl bg-brand-bg border-none ring-1 ring-brand-border hover:ring-2 hover:ring-brand-grey/50 focus:ring-2 focus:ring-brand-grey/50 focus:outline-none transition-all"
                       />
@@ -298,11 +351,12 @@ const SkillPractice = () => {
                         <Input
                           type="number"
                           min={1}
-                          max={Math.min(100, questions.length)}
+                          max={isPaid ? questions.length : Math.min(questions.length, remainingQuestions)}
                           value={timedQuestionCount}
                           onChange={(e) => {
-                            const val = Math.max(1, Math.min(100, parseInt(e.target.value) || 1));
-                            setTimedQuestionCount(Math.min(val, questions.length));
+                            const maxVal = isPaid ? questions.length : Math.min(questions.length, remainingQuestions);
+                            const val = Math.max(1, Math.min(maxVal, parseInt(e.target.value) || 1));
+                            setTimedQuestionCount(val);
                           }}
                           className="w-20 rounded-xl bg-brand-bg border-none ring-1 ring-brand-border hover:ring-2 hover:ring-brand-grey/50 focus:ring-2 focus:ring-brand-grey/50 focus:outline-none transition-all"
                         />

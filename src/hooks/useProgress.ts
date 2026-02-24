@@ -160,7 +160,7 @@ export const useProgress = () => {
 };
 
 export const useProgressStats = () => {
-  const { progress, refresh } = useProgress();
+  const { progress, refresh, isLoading } = useProgress();
   const { user } = useAuth();
 
   const validQuestionIds = useValidQuestionIds();
@@ -172,19 +172,19 @@ export const useProgressStats = () => {
   // Sort results by accumulated timestamp descending (newest first)
   const sortedResults = [...results].sort((a, b) => b.answeredAt - a.answeredAt);
 
-  // 1. Overall Recent Accuracy (Last 50 questions)
-  const recentWindow = sortedResults.slice(0, 50);
+  const nonSkippedResults = sortedResults.filter(r => r.selectedAnswer !== ("SKIPPED" as any));
+  const recentWindow = nonSkippedResults.slice(0, 50);
   const recentCorrect = recentWindow.filter(r => r.isCorrect).length;
   const recentAttempted = recentWindow.length;
-  // This is the specific metric requested for the Progress Tracker
   const recentAccuracy = recentAttempted > 0
     ? Math.round((recentCorrect / recentAttempted) * 100)
     : 0;
 
-  // Lifetime stats for legacy uses if needed, or we can repurpose 'accuracy'
-  const lifetimeCorrect = results.filter((r) => r.isCorrect).length;
-  const lifetimeIncorrect = attempted - lifetimeCorrect;
-  const lifetimeAccuracy = attempted > 0 ? Math.round((lifetimeCorrect / attempted) * 100) : 0;
+  const lifetimeResults = results.filter(r => r.selectedAnswer !== ("SKIPPED" as any));
+  const lifetimeCorrect = lifetimeResults.filter((r) => r.isCorrect).length;
+  const lifetimeAttempted = lifetimeResults.length;
+  const lifetimeAccuracy = lifetimeAttempted > 0 ? Math.round((lifetimeCorrect / lifetimeAttempted) * 100) : 0;
+  const lifetimeIncorrect = lifetimeAttempted - lifetimeCorrect;
 
   const totalQuestionsPerSkill = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -209,7 +209,6 @@ export const useProgressStats = () => {
     if (r.isCorrect) skillStats[skill].correct++;
   });
 
-  // Calculate recent stats per skill for Weakness section
   const skillResultsMap: Record<string, typeof results> = {};
   sortedResults.forEach(r => {
     const skill = r.skill.toLowerCase() === "cross-text connections"
@@ -221,9 +220,8 @@ export const useProgressStats = () => {
 
   const skillRecentStats: Record<string, { accuracy: number; total: number }> = {};
   Object.keys(skillResultsMap).forEach(skill => {
-    const skillRes = skillResultsMap[skill];
-    const total = skillRes.length;
-    // Take last 10
+    const skillRes = skillResultsMap[skill].filter(r => r.selectedAnswer !== ("SKIPPED" as any));
+    const total = skillResultsMap[skill].length; // Total includes skips for progress
     const window = skillRes.slice(0, 10);
     const windowCorrect = window.filter(r => r.isCorrect).length;
     const windowAccuracy = window.length > 0 ? (windowCorrect / window.length) * 100 : 0;
@@ -256,7 +254,7 @@ export const useProgressStats = () => {
     attempted,
     correct: lifetimeCorrect,
     incorrect: lifetimeIncorrect,
-    accuracy: recentAccuracy, // Using recent accuracy as the main "Accuracy" metric
+    accuracy: recentAccuracy,
     lifetimeAccuracy,
     mastered,
     needsWork,
@@ -265,5 +263,6 @@ export const useProgressStats = () => {
     skillRecentStats,
     domainStats,
     refresh,
+    isLoading
   };
 };

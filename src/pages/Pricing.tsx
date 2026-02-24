@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { ArrowRight, Check, Sparkles, Star } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const plans = [
     {
@@ -22,6 +23,7 @@ const plans = [
         cta: "Get Started",
         variant: "outline",
         popular: false,
+        paymentLink: null,
     },
     {
         name: "Sponge Plus",
@@ -39,6 +41,7 @@ const plans = [
         variant: "default",
         popular: true,
         highlight: "Most Popular",
+        paymentLink: "https://buy.stripe.com/test_8x29AL75e7zf09v5CK8EM00",
     },
     {
         name: "Sponge Pro",
@@ -55,10 +58,12 @@ const plans = [
         cta: "Go Pro",
         variant: "outline",
         popular: false,
+        paymentLink: "https://buy.stripe.com/test_cNi14ffBK2eV1dz7KS8EM01",
     },
 ];
 
 const Pricing = () => {
+    const navigate = useNavigate();
     return (
         <div className="min-h-screen bg-brand-bg flex flex-col">
             <Navbar />
@@ -151,6 +156,13 @@ const Pricing = () => {
                                                 className={`w-full rounded-2xl ${plan.popular ? "bg-brand-blue hover:bg-brand-blue/90" : ""}`}
                                                 variant={plan.popular ? "default" : "outline"}
                                                 size="lg"
+                                                onClick={() => {
+                                                    if (plan.paymentLink) {
+                                                        window.open(plan.paymentLink, "_blank");
+                                                    } else {
+                                                        navigate("/auth");
+                                                    }
+                                                }}
                                             >
                                                 {plan.cta}
                                                 <ArrowRight className="ml-2 h-4 w-4" />

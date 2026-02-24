@@ -92,7 +92,8 @@ export const QuestionPlayer = ({ questions, timed = false, timedDuration, onExit
     const handleSubmit = useCallback(() => {
         questions.forEach(q => {
             const answer = answers[q.question_id];
-            if (answer) recordAnswer(q, answer);
+            // Record answer if exists, otherwise record as SKIPPED to count towards daily limit
+            recordAnswer(q, (answer || "SKIPPED") as any);
         });
         setPhase("summary");
     }, [questions, answers, recordAnswer, setPhase]);
