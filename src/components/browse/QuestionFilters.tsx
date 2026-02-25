@@ -229,7 +229,7 @@ export const QuestionFilters = ({ filters, onFilterChange, stats, showUnattempte
                     {!isPaid && (
                         <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-brand-blue/10 text-brand-blue border border-brand-blue/20">
                             <Lock className="h-3 w-3" />
-                            <span className="text-[10px] font-bold uppercase tracking-wider">Advanced</span>
+                            <span className="text-[10px] font-bold uppercase tracking-wider">Premium</span>
                         </div>
                     )}
                 </div>
@@ -318,7 +318,7 @@ export const QuestionFilters = ({ filters, onFilterChange, stats, showUnattempte
                     {!isPaid && (
                         <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-brand-blue/10 text-brand-blue border border-brand-blue/20">
                             <Lock className="h-3 w-3" />
-                            <span className="text-[10px] font-bold uppercase tracking-wider">Advanced</span>
+                            <span className="text-[10px] font-bold uppercase tracking-wider">Premium</span>
                         </div>
                     )}
                 </div>

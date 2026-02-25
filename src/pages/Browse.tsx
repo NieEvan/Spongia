@@ -277,9 +277,12 @@ const Browse = () => {
               {/* Practice Options */}
               {!isPaid && (
                 <div className="mb-6 flex items-center justify-between p-4 bg-brand-blue/5 rounded-2xl border border-brand-blue/10">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-brand-blue" />
+                  <div className="flex items-center gap-3 h-5">
                     <span className="text-sm font-semibold text-brand-black">Daily Practice Limit</span>
+                    <div className="w-px h-full bg-brand-blue/20" />
+                    <span className="text-xs text-brand-blue font-medium h-full flex items-center">
+                      Get unlimited access with Premium
+                    </span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <span className="text-sm font-bold text-brand-blue">{remainingQuestions}</span>
@@ -397,9 +400,9 @@ const Browse = () => {
 
               {/* Show Questions Button */}
               {searchedQuestions.length > 0 && (
-                <div className="mt-8 flex flex-col items-center gap-4">
+                <div className="mt-8 relative flex items-center justify-center">
                   <Button
-                    variant="outline"
+                    variant={isPaid ? "outline" : "ghost"}
                     onClick={() => {
                       if (!isPaid) {
                         toast({
@@ -411,9 +414,11 @@ const Browse = () => {
                       }
                       setShowQuestions(!showQuestions);
                     }}
-                    className={`gap-2 rounded-xl border-2 bg-white hover:bg-neutral-50 hover:text-brand-black hover:border-brand-border hover:scale-[1.02] active:scale-95 transition-all duration-200 transform-gpu min-w-[200px] text-base font-medium shadow-sm ${!isPaid ? "text-brand-grey/50 border-brand-border/50" : "text-brand-grey"}`}
+                    className={`gap-2 rounded-xl border-2 bg-white transition-all duration-200 transform-gpu min-w-[210px] text-base font-medium shadow-sm ${!isPaid
+                      ? "text-brand-grey/50 border-brand-border/50 cursor-default hover:bg-white hover:text-brand-grey/50"
+                      : "text-brand-grey hover:bg-neutral-50 hover:text-brand-black hover:border-brand-border hover:scale-[1.02] active:scale-95"
+                      }`}
                   >
-                    {!isPaid && <Lock className="h-4 w-4" />}
                     {showQuestions ? (
                       <>
                         <EyeOff className="h-4 w-4" />
@@ -422,15 +427,16 @@ const Browse = () => {
                     ) : (
                       <>
                         <Eye className="h-4 w-4" />
-                        Show Questions
+                        <span>Show Questions</span>
                       </>
                     )}
                   </Button>
-                  {!isPaid && (
-                    <p className="text-xs text-brand-grey font-medium flex items-center gap-1">
-                      <Sparkles className="h-3 w-3 text-brand-blue" />
-                      Unlock this feature with Sponge Plus
-                    </p>
+
+                  {!isPaid && !showQuestions && (
+                    <div className="absolute left-[calc(50%+115px)] flex items-center gap-1 px-1.5 py-0 rounded-full bg-brand-blue/10 text-brand-blue border border-brand-blue/20 whitespace-nowrap h-[18px]">
+                      <Lock className="h-2.5 w-2.5" />
+                      <span className="text-[9px] font-bold uppercase tracking-wider">Premium</span>
+                    </div>
                   )}
                 </div>
               )}
