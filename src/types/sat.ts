@@ -14,7 +14,7 @@ export interface SATQuestion {
     D: string;
   };
   correct_answer: "A" | "B" | "C" | "D";
-  explanation: string;
+  explanation: string | Record<ChoiceKey, string>;
   subject_area?: string;
   subtopic?: string;
 }

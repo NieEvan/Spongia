@@ -49,14 +49,6 @@ export const WeaknessCard = () => {
             ) : (
                 <div className="flex-1 flex flex-col items-center justify-center text-center">
                     <p className="text-sm text-[#75757A] leading-relaxed max-w-[240px]">
-                        We rank the skills based on your achieved accuracy in each of them.
-                    </p>
-                    <div className="flex items-center w-full max-w-[160px] my-4">
-                        <div className="h-px bg-gray-200 flex-1"></div>
-                        <div className="h-1 w-1 bg-gray-300 rounded-full mx-2"></div>
-                        <div className="h-px bg-gray-200 flex-1"></div>
-                    </div>
-                    <p className="text-sm text-[#75757A] leading-relaxed max-w-[240px]">
                         Complete at least 10 questions of an individual skill.
                     </p>
                 </div>

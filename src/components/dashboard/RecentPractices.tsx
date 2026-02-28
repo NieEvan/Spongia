@@ -62,9 +62,9 @@ export const RecentPractices = () => {
 
     return (
         <div className="h-full flex flex-col overflow-hidden">
-            <div className="flex flex-col pb-4 flex-shrink-0">
-                <h2 className="text-[20px] font-bold mb-1 text-[#1D1D1F]">Skills</h2>
-                <div className="flex items-center justify-between min-h-[1.5rem]">
+            <div className="flex flex-col pb-2 flex-shrink-0">
+                <h2 className="text-[20px] font-bold mb-0.5 text-[#1D1D1F]">Skills</h2>
+                <div className="flex items-center justify-between min-h-[1.25rem]">
                     <p className="text-sm text-[#75757A]">Recent practices</p>
                     <Link to="/skills">
                         <Button variant="ghost" size="sm" className="h-auto p-0 text-[#75757A] hover:bg-transparent hover:text-blue-600 transition-colors gap-1 font-medium">
@@ -74,16 +74,16 @@ export const RecentPractices = () => {
                 </div>
             </div>
             <div className="flex-1 overflow-y-auto">
-                <div className="space-y-4 pb-2">
+                <div className="space-y-3 pb-0">
                     {recentSkills.map((skill) => {
                         const Icon = skill.icon;
                         // Extract just the bg class from domainIconColors which is like "bg-domain-ideas text-white"
                         const domainColorClass = skill.domain ? domainIconColors[skill.domain]?.split(" ")[0] : "bg-primary";
                         
                         return (
-                            <div key={skill.name} className="bg-white p-4 rounded-3xl shadow-sm flex items-center gap-4">
-                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${domainColorClass} text-white`}>
-                                    <Icon className="w-6 h-6" />
+                            <div key={skill.name} className="bg-white pt-4 pb-4 pl-6 pr-6 rounded-2xl shadow-sm flex items-center gap-2">
+                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${domainColorClass} text-white`}>
+                                    <Icon className="w-5 h-5" />
                                 </div>
                                 <div className="flex-1 min-w-0 flex flex-col justify-center">
                                     <div className="flex items-center justify-between mb-1.5">

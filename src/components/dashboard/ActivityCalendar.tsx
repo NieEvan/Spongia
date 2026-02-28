@@ -75,31 +75,29 @@ export const ActivityCalendar = () => {
         return "bg-blue-900 text-white font-bold";
     };
 
+    const monthShort = currentDate.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+
     return (
         <div className="flex flex-col h-full">
-            <div className="flex flex-col pb-4 flex-shrink-0">
-                <h2 className="text-[20px] font-bold mb-1 text-[#1D1D1F]">Activity</h2>
-                <div className="min-h-[1.5rem] flex items-center">
-                    <p className="text-sm text-[#75757A]">Track your effort</p>
-                </div>
-            </div>
-            <Card className="border-none shadow-sm bg-white rounded-3xl overflow-hidden flex flex-col p-4 h-[17rem]">
+            {/* Removed top title block — 'Activity' will appear in the card header */}
+            <Card className="border-none shadow-sm bg-white rounded-3xl overflow-hidden flex flex-col pt-4 pb-4 pl-6 pr-6 h-full">
                 <div className="flex-1 flex flex-col min-h-0">
-                    <div className="flex items-center justify-between mb-3 flex-shrink-0 px-1">
-                        <span className="font-medium text-[14px] text-[#1d1d1f]">{monthName}</span>
-                        <div className="flex gap-1">
-                            <Button 
-                                variant="ghost" 
-                                size="icon" 
-                                className="h-8 w-8 rounded-xl hover:bg-muted text-muted-foreground hover:text-[#1d1d1f]" 
+                    <div className="flex items-center justify-between mb-2 flex-shrink-0">
+                        <span className="text-[20px] font-bold text-[#1d1d1f]">Activity</span>
+                        <div className="flex items-center gap-2">
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 rounded-xl hover:bg-muted text-muted-foreground hover:text-[#1d1d1f]"
                                 onClick={prevMonth}
                             >
                                 <ChevronLeft className="h-4 w-4" />
                             </Button>
-                            <Button 
-                                variant="ghost" 
-                                size="icon" 
-                                className="h-8 w-8 rounded-xl hover:bg-muted text-muted-foreground hover:text-[#1d1d1f]" 
+                            <span className="text-sm font-medium text-[#1d1d1f]">{monthShort}</span>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 rounded-xl hover:bg-muted text-muted-foreground hover:text-[#1d1d1f]"
                                 onClick={nextMonth}
                             >
                                 <ChevronRight className="h-4 w-4" />
@@ -107,7 +105,7 @@ export const ActivityCalendar = () => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-7 gap-1 text-center text-[12px] text-muted-foreground mb-2 flex-shrink-0">
+                    <div className="grid grid-cols-7 gap-0.5 text-center text-[12px] text-muted-foreground mb-1 flex-shrink-0">
                         <div>S</div>
                         <div>M</div>
                         <div>T</div>
@@ -116,18 +114,18 @@ export const ActivityCalendar = () => {
                         <div>F</div>
                         <div>S</div>
                     </div>
-                    <div className="h-px bg-gray-200 w-full mb-1" />
+                    <div className="h-px bg-gray-200 w-full mb-0.5" />
 
-                    <div className="grid grid-cols-7 gap-x-1 gap-y-2.5 auto-rows-[1.05rem] flex-1 min-h-0 relative z-10 mt-3">
+                    <div className="grid grid-cols-7 gap-x-0.5 gap-y-0.5 auto-rows-[minmax(0,1fr)] flex-1 min-h-0 relative z-10 mt-1">
                         {days.map((d, i) => (
                             <div key={i} className="flex items-center justify-center min-h-0">
                                 {d.day && (
                                     <div 
                                         title={d.count > 0 ? `${d.count} questions practiced` : "No activity"}
                                         className={`
-                                                w-6 h-6 flex items-center justify-center rounded-lg text-[12px] leading-none pt-0.5
-                                                ${getActivityColor(d.count)}
-                                            `}
+                                                    w-6 h-6 flex items-center justify-center rounded-lg text-[12px] leading-none pt-0.5
+                                                    ${getActivityColor(d.count)}
+                                                `}
                                     >
                                         {d.day}
                                     </div>
@@ -136,7 +134,7 @@ export const ActivityCalendar = () => {
                         ))}
                     </div>
 
-                    <div className="mt-4 flex-shrink-0 flex items-center justify-end gap-2 text-[12px] text-muted-foreground px-1 relative z-0">
+                    <div className="-mt-4 flex-shrink-0 flex items-center justify-end gap-1.5 text-[12px] text-muted-foreground px-1 relative z-0">
                         <span>Less</span>
                         <div className="flex gap-1">
                             <div className="w-2 h-2 rounded-[1px] bg-muted" title="0 questions" />

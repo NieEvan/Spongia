@@ -27,7 +27,7 @@ const SkillsPage = () => {
     <div className="flex h-screen overflow-hidden bg-brand-bg">
       <Sidebar />
 
-      <main className="flex-1 pt-12 md:pt-20 p-6 md:p-10 overflow-y-auto">
+      <main className="flex-1 pt-[60px] pb-[20px] px-6 md:px-10 overflow-y-auto">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">

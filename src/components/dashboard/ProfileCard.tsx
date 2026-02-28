@@ -56,11 +56,11 @@ export const ProfileCard = () => {
     };
 
     return (
-        <Card className="border-none shadow-sm bg-white rounded-3xl h-full flex flex-col">
-            <CardHeader className="flex flex-row items-center justify-between pt-5 pb-4">
+        <Card className="border-none shadow-sm bg-white rounded-3xl h-full flex flex-col pt-5 pb-5 pl-6 pr-6">
+            <CardHeader className="flex flex-row items-center justify-between pt-0 pb-0 px-0">
                 <CardTitle className="text-[20px] font-bold text-[#1d1d1f]">Profile</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col items-center pb-6">
+            <CardContent className="flex flex-col items-center pb-0 px-0">
                 <div className="relative group mb-3">
                     <Avatar className="h-20 w-20 bg-neutral-100 transition-opacity group-hover:opacity-80">
                         <AvatarImage src={avatarUrl || "/default-avatar.png"} className="object-cover" />

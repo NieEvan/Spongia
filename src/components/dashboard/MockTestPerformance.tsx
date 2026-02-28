@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef, useLayoutEffect } from "react";
 import { cn } from "@/lib/utils";
 
 type TestRecord = {
@@ -23,7 +23,8 @@ export const MockTestPerformance = () => {
 
     const values = tests.map(t => (view === "overall" ? t.overall : view === "rw" ? t.rw : t.math));
 
-    const svgWidth = 600;
+    // Use a large internal SVG width so the chart scales to fill container width
+    const svgWidth = 1000;
     const svgHeight = 120;
     const paddingLeft = 48; // reserve space for y-axis labels
     const paddingRight = 18;
@@ -44,14 +45,43 @@ export const MockTestPerformance = () => {
 
     const pathD = points.map((p, i) => `${i === 0 ? "M" : "L"} ${p[0].toFixed(2)} ${p[1].toFixed(2)}`).join(" ");
 
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const btnRefs = useRef<Array<HTMLButtonElement | null>>([]);
+    const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number }>({ left: 0, width: 0 });
+
+    const viewIndex = view === "overall" ? 0 : view === "rw" ? 1 : 2;
+
+    const updateIndicator = () => {
+        const container = containerRef.current;
+        const btn = btnRefs.current[viewIndex];
+        if (!container || !btn) return;
+        const cRect = container.getBoundingClientRect();
+        const bRect = btn.getBoundingClientRect();
+        setIndicatorStyle({ left: bRect.left - cRect.left, width: bRect.width });
+    };
+
+    useLayoutEffect(() => {
+        updateIndicator();
+        window.addEventListener("resize", updateIndicator);
+        return () => window.removeEventListener("resize", updateIndicator);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [view]);
+
     return (
-        <div className="rounded-3xl bg-white p-5">
-            <div className="flex items-center justify-between mb-4">
+        <div className="rounded-3xl bg-white pt-5 pb-5 pl-6 pr-6">
+            <div className="flex items-center justify-between mb-2">
                 <h2 className="text-[20px] font-bold tracking-tight text-[#1D1D1F]">Mock Test Performance</h2>
-                <div className="flex items-center gap-2">
-                    <button onClick={() => setView("overall")} className={cn("px-4 py-1.5 text-sm font-medium rounded-full transition-colors", view === "overall" ? "bg-accent text-white" : "text-[#75757A] hover:bg-[#f5f5f7]")}>Overall</button>
-                    <button onClick={() => setView("rw")} className={cn("px-4 py-1.5 text-sm font-medium rounded-full transition-colors", view === "rw" ? "bg-accent text-white" : "text-[#75757A] hover:bg-[#f5f5f7]")}>Reading &amp; Writing</button>
-                    <button onClick={() => setView("math")} className={cn("px-4 py-1.5 text-sm font-medium rounded-full transition-colors", view === "math" ? "bg-accent text-white" : "text-[#75757A] hover:bg-[#f5f5f7]")}>Math</button>
+                {/* Toggle group with sliding active background */}
+                <div ref={containerRef} className="relative inline-flex bg-neutral-100 rounded-full p-1">
+                    {/* sliding active indicator (measured) */}
+                    <div
+                        aria-hidden
+                        className="absolute bg-[#2563EB] rounded-full transition-all duration-300 ease-in-out"
+                        style={{ left: indicatorStyle.left, width: indicatorStyle.width, top: 6, bottom: 6 }}
+                    />
+                    <button ref={(el) => (btnRefs.current[0] = el)} onClick={() => setView("overall")} className={cn("relative z-10 px-2 py-1 text-sm font-medium rounded-full transition-colors flex-1 text-center", view === "overall" ? "text-white" : "text-[#5b616a]")}>Overall</button>
+                    <button ref={(el) => (btnRefs.current[1] = el)} onClick={() => setView("rw")} className={cn("relative z-10 px-2 py-1 text-sm font-medium rounded-full transition-colors flex-1 text-center", view === "rw" ? "text-white" : "text-[#5b616a]")}>R&W</button>
+                    <button ref={(el) => (btnRefs.current[2] = el)} onClick={() => setView("math")} className={cn("relative z-10 px-2 py-1 text-sm font-medium rounded-full transition-colors flex-1 text-center", view === "math" ? "text-white" : "text-[#5b616a]")}>Math</button>
                 </div>
             </div>
 
@@ -78,7 +108,7 @@ export const MockTestPerformance = () => {
 
                                 {/* points */}
                                 {points.map((p, i) => (
-                                    <circle key={i} cx={p[0]} cy={p[1]} r={4} fill="#1D4ED8" />
+                                    <circle key={i} cx={p[0]} cy={p[1]} r={3} fill="#1D4ED8" />
                                 ))}
 
                                 {/* x labels */}

@@ -54,11 +54,6 @@ export const SkillCard = ({ skill, domain, totalCount, attemptedCount, recentAcc
           "hover:shadow-md hover:-translate-y-1 active:scale-[0.98]"
         )}
       >
-        {/* Top-right question count */}
-        <div className="absolute top-5 right-4 px-3 py-1 text-xs text-[#75757A]">
-          {totalCount} question{totalCount !== 1 ? "s" : ""}
-        </div>
-
         <div className="flex items-center gap-4">
           <div
             className={cn(
@@ -78,12 +73,12 @@ export const SkillCard = ({ skill, domain, totalCount, attemptedCount, recentAcc
 
             <div className="mt-2 flex items-center gap-6">
               <div className="flex items-center gap-2">
-                <span className="text-xs text-[#75757A]">Completion</span>
+                <span className="text-xs text-[#75757A]">Done</span>
                 <span className="text-xs font-medium text-[#1D1D1F]">{Math.round(completionRate)}%</span>
               </div>
-
+ 
               <div className="flex items-center gap-2">
-                <span className="text-xs text-[#75757A]">Accuracy</span>
+                <span className="text-xs text-[#75757A]">Acc</span>
                 <span className={cn(
                   "text-xs font-medium",
                   attemptedCount >= 1 ? (recentAccuracy >= 80 ? "text-green-600" : recentAccuracy >= 50 ? "text-orange-500" : "text-red-500") : "text-muted-foreground",

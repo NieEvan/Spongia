@@ -10,8 +10,10 @@ const Dashboard = () => {
    return (
       <div className="flex h-screen overflow-hidden bg-[#f5f5f7]">
          <Sidebar />
-         <main className="flex-1 pt-12 md:pt-20 p-6 md:p-10 overflow-y-auto">
-            <div className="max-w-7xl mx-auto">
+         <main className="flex-1 pt-[60px] pb-[20px] px-6 md:px-10 overflow-y-auto">
+            <div className="relative">
+               <div className="absolute left-0 top-0 bottom-0 w-20 bg-brand-blue rounded-l-3xl -z-10" />
+               <div className="max-w-7xl mx-auto">
                <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-12 gap-y-8">
                   {/* Page Title */}
                   <div className="lg:col-span-3 pb-0">
@@ -20,8 +22,8 @@ const Dashboard = () => {
 
                   {/* TOP SECTION */}
                   {/* Top Left: Progress Tracker (compact on dashboard) */}
-                  <div className="lg:col-span-2 lg:h-52">
-                     <ProgressTracker compact />
+                  <div className="lg:col-span-2 lg:h-full">
+                     <ProgressTracker />
                   </div>
 
                   {/* Top Right: Profile */}
@@ -52,6 +54,7 @@ const Dashboard = () => {
                               <FriendsCard />
                            </div>
                </div>
+            </div>
             </div>
          </main>
       </div>

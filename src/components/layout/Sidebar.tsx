@@ -1,22 +1,22 @@
 import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, BookOpen, Search, Users } from "lucide-react";
-import spongiLogo from "@/assets/spongi-logo.png";
+import spongiLogoWhite from "@/assets/spongi-logo-white.png";
 
 const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { path: "/skills", label: "Skills", icon: BookOpen },
   { path: "/friends", label: "Social", icon: Users },
-  { path: "/browse", label: "Browse questions", icon: Search },
+  { path: "/browse", label: "Browse", icon: Search },
 ];
 
 export const Sidebar = () => {
   const location = useLocation();
 
   return (
-    <aside className="hidden w-64 flex-col border-r bg-white px-6 py-8 md:flex h-screen sticky top-0">
-      <Link to="/" className="mb-10 flex items-center gap-2.5">
-        <img src={spongiLogo} alt="Spongi logo" className="h-8 w-8" />
-        <span className="font-display text-xl font-bold tracking-tight text-[#1d1d1f]">Spongia</span>
+    <aside className="hidden w-72 flex-col bg-brand-blue text-white px-6 py-8 md:flex h-screen sticky top-0">
+      <Link to="/" className="mb-10 flex items-center gap-3">
+        <img src={spongiLogoWhite} alt="Spongia logo" className="h-8 w-8" />
+        <span className="font-display text-xl font-bold tracking-tight text-white">Spongia</span>
       </Link>
 
       <nav className="flex flex-col gap-2">
@@ -30,12 +30,12 @@ export const Sidebar = () => {
               to={item.path}
               className={`flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 active:scale-[0.97] ${
                 isActive
-                  ? "bg-secondary text-foreground"
-                  : "text-muted-foreground hover:bg-secondary/50 hover:text-foreground"
+                  ? "bg-white/10 text-white"
+                  : "text-white/90 hover:bg-white/10"
               }`}
             >
-              <Icon className="h-4 w-4" />
-              {item.label}
+              <Icon className="h-4 w-4 text-white/90" />
+              <span className="text-white/90">{item.label}</span>
             </Link>
           );
         })}
