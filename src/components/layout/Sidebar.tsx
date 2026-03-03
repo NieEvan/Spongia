@@ -21,7 +21,10 @@ export const Sidebar = () => {
   const avatarUrl = myProfile?.avatar_url || null;
 
   return (
-    <aside className="hidden w-72 flex-col bg-brand-blue text-white px-6 py-8 md:flex h-screen sticky top-0">
+    <aside
+      className="hidden w-72 flex-col bg-brand-blue text-white px-6 py-8 md:flex h-screen sticky top-0"
+      style={{ boxShadow: "10px 0 32px 0px rgba(0, 0, 0, 0.15)" }}
+    >
       <Link to="/" className="mb-10 flex items-center gap-3">
         <img src={spongiLogoWhite} alt="Spongia logo" className="h-8 w-8" />
         <span className="font-display text-xl font-bold tracking-tight text-white">Spongia</span>
