@@ -3,6 +3,7 @@ import { FriendsCard } from "@/components/dashboard/FriendsCard";
 import { GoalCard } from "@/components/dashboard/GoalCard";
 import MockTestPerformance from "@/components/dashboard/MockTestPerformance";
 import { ProgressTracker } from "@/components/dashboard/ProgressTracker";
+import { RecentPractices } from "@/components/dashboard/RecentPractices";
 import { Sidebar } from "@/components/layout/Sidebar";
 
 const Dashboard = () => {
@@ -14,10 +15,15 @@ const Dashboard = () => {
           {/* Page Title */}
           <h1 className="text-4xl font-bold tracking-tight text-[#1D1D1F] pb-0">Dashboard</h1>
 
-          <div className="flex flex-col md:flex-row gap-12">
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col sm:flex-row gap-6">
-                <ProgressTracker />
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex flex-col gap-6 flex-1">
+              <div className="flex flex-col lg:flex-row gap-6">
+                <div className="flex flex-col gap-6 flex-1">
+                  <ProgressTracker compact />
+                  <div className="bg-white rounded-[24px] p-6 shadow-sm border border-slate-100 flex-1 hover:shadow-md transition-shadow">
+                    <RecentPractices />
+                  </div>
+                </div>
                 <GoalCard />
               </div>
               <MockTestPerformance />

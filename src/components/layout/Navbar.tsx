@@ -79,9 +79,9 @@ export const Navbar = () => {
                     {loading ? null : user ? (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="flex items-center gap-3 rounded-full pl-3 pr-1 py-1 h-auto border-brand-black hover:bg-secondary/50">
+                                <Button variant="outline" className="flex items-center gap-3 rounded-full pl-3 pr-1 py-1 h-auto hover:bg-secondary/50">
                                     <User className="h-4 w-4 text-brand-black" />
-                                    <Avatar className="h-8 w-8 border border-brand-black">
+                                    <Avatar className="h-8 w-8 border">
                                         <AvatarImage 
                                             src={profile?.avatar_url || user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/initials/svg?seed=${user.email}`} 
                                             alt={user.email || ""} 

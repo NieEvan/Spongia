@@ -2,7 +2,6 @@ import { Progress } from "@/components/ui/progress";
 import { useProgressStats } from "@/hooks/useProgress";
 import { useQuestionStats } from "@/hooks/useQuestions";
 import { cn } from "@/lib/utils";
-import { RecentPractices } from "./RecentPractices";
 
 const domainColors: Record<string, string> = {
   "Information and Ideas": "bg-domain-ideas",
@@ -33,7 +32,7 @@ export const ProgressTracker = ({ compact = false }: { compact?: boolean }) => {
   return (
     <div
       className={cn(
-        "rounded-[24px] bg-white pt-6 pb-6 pl-6 pr-6 shadow-sm border border-slate-100 flex flex-col justify-start",
+        "rounded-[24px] bg-white pt-6 pb-6 pl-6 pr-6 shadow-sm border border-slate-100 flex flex-col justify-start hover:shadow-md transition-shadow",
         compact ? "" : "grow",
       )}
     >
@@ -54,11 +53,6 @@ export const ProgressTracker = ({ compact = false }: { compact?: boolean }) => {
 
         {/* Main Progress Bar */}
         <Progress value={progressPercent} className={compact ? "mb-2 h-1.5 bg-[#f5f5f7]" : "h-2 bg-[#f5f5f7]"} />
-      </div>
-
-      {/* Embedded Skills Section horizontally placed beneath progress bar */}
-      <div className="mt-2 pt-4 border-t border-slate-50 grow">
-        <RecentPractices />
       </div>
     </div>
   );

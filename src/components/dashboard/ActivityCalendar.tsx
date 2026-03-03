@@ -80,9 +80,9 @@ export const ActivityCalendar = () => {
     return (
         <div className="flex flex-col h-full">
             {/* Removed top title block — 'Activity' will appear in the card header */}
-            <Card className="border-none shadow-sm bg-white rounded-3xl overflow-hidden flex flex-col pt-4 pb-4 pl-6 pr-6 h-full">
+            <Card className="border-none shadow-sm hover:shadow-md transition-shadow bg-white rounded-3xl overflow-hidden flex flex-col p-6 h-full">
                 <div className="flex-1 flex flex-col min-h-0">
-                    <div className="flex items-center justify-between mb-2 flex-shrink-0">
+                    <div className="flex items-center justify-between mb-1 flex-shrink-0">
                         <span className="text-[20px] font-bold text-[#1d1d1f]">Activity</span>
                         <div className="flex items-center gap-2">
                             <Button
@@ -105,7 +105,7 @@ export const ActivityCalendar = () => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-7 gap-0.5 text-center text-[12px] text-muted-foreground mb-1 flex-shrink-0">
+                    <div className="mt-1 text-center text-[12px] text-muted-foreground mb-1 flex-shrink-0 grid grid-cols-7 gap-0.5">
                         <div>S</div>
                         <div>M</div>
                         <div>T</div>
@@ -114,16 +114,16 @@ export const ActivityCalendar = () => {
                         <div>F</div>
                         <div>S</div>
                     </div>
-                    <div className="h-px bg-gray-200 w-full mb-0.5" />
+                    <div className="h-px bg-gray-200 w-full" />
 
-                    <div className="grid grid-cols-7 gap-x-0.5 gap-y-0.5 auto-rows-[minmax(0,1fr)] flex-1 min-h-0 relative z-10 mt-1">
+                    <div className="grid grid-cols-7 auto-rows-[minmax(0,1fr)] flex-1 min-h-0 relative z-10 mt-2">
                         {days.map((d, i) => (
                             <div key={i} className="flex items-center justify-center min-h-0">
                                 {d.day && (
                                     <div 
                                         title={d.count > 0 ? `${d.count} questions practiced` : "No activity"}
                                         className={`
-                                                    w-6 h-6 flex items-center justify-center rounded-lg text-[12px] leading-none pt-0.5
+                                                    w-[22px] h-[22px] flex items-center justify-center rounded-lg text-[12px] leading-none
                                                     ${getActivityColor(d.count)}
                                                 `}
                                     >
@@ -134,7 +134,7 @@ export const ActivityCalendar = () => {
                         ))}
                     </div>
 
-                    <div className="-mt-4 flex-shrink-0 flex items-center justify-end gap-1.5 text-[12px] text-muted-foreground px-1 relative z-0">
+                    <div className="-mt-8 flex-shrink-0 flex items-center justify-end gap-1.5 text-[12px] text-muted-foreground px-1 relative z-0">
                         <span>Less</span>
                         <div className="flex gap-1">
                             <div className="w-2 h-2 rounded-[1px] bg-muted" title="0 questions" />

@@ -1,126 +1,162 @@
-import { useMemo, useState, useRef, useLayoutEffect } from "react";
-import { cn } from "@/lib/utils";
+import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from "recharts";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
-type TestRecord = {
-    date: string; // ISO date
-    overall: number;
-    rw: number;
-    math: number;
-};
+const data = [
+  { date: "Oct 1", score: 1080, rw: 540, math: 540 },
+  { date: "Oct 20", score: 1120, rw: 560, math: 560 },
+  { date: "Nov 5", score: 1125, rw: 560, math: 565 },
+  { date: "Nov 25", score: 1150, rw: 580, math: 570 },
+  { date: "Dec 10", score: 1155, rw: 580, math: 575 },
+  { date: "Jan 1", score: 1175, rw: 600, math: 575 },
+  { date: "Jan 20", score: 1180, rw: 600, math: 580 },
+  { date: "Feb 15", score: 1600, rw: 800, math: 800 },
+];
 
-// Small, dependency-free SVG line chart for mock test scores
-export const MockTestPerformance = () => {
-    const [view, setView] = useState<"overall" | "rw" | "math">("overall");
+const mockRecords = [
+  { id: 3, name: "Test 3", date: "Dec 12, 2023" },
+  { id: 2, name: "Test 2", date: "Nov 15, 2023" },
+  { id: 1, name: "Test 1", date: "Oct 01, 2023" },
+];
 
-    // Placeholder/mock data — will be replaced by real feature later
-    const tests: TestRecord[] = useMemo(() => [
-        { date: "2025-10-01", overall: 1080, rw: 540, math: 540 },
-        { date: "2025-11-05", overall: 1120, rw: 560, math: 560 },
-        { date: "2025-12-10", overall: 1150, rw: 580, math: 570 },
-        { date: "2026-01-20", overall: 1170, rw: 590, math: 580 },
-        { date: "2026-02-15", overall: 1200, rw: 600, math: 600 }
-    ], []);
+const MockTestPerformance = () => {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("Overall");
 
-    const values = tests.map(t => (view === "overall" ? t.overall : view === "rw" ? t.rw : t.math));
+  const activeKey = activeTab === "Overall" ? "score" : activeTab === "R&W" ? "rw" : "math";
+  const maxLimit = activeTab === "Overall" ? 1600 : 800;
 
-    // Use a large internal SVG width so the chart scales to fill container width
-    const svgWidth = 1000;
-    const svgHeight = 120;
-    const paddingLeft = 48; // reserve space for y-axis labels
-    const paddingRight = 18;
-    const paddingY = 18;
+  const dataMin = Math.min(...data.map(d => d[activeKey]));
+  const dataMax = Math.max(...data.map(d => d[activeKey]));
+  
+  // Calculate bounds rounded to the nearest 50 for clean intervals
+  const yMin = Math.max(0, Math.floor((dataMin - 20) / 50) * 50);
+  const yMax = Math.min(maxLimit, Math.ceil((dataMax + 20) / 50) * 50);
 
-    const minVal = Math.min(...values, 0);
-    const maxVal = Math.max(...values, 1000);
+  // Generate explicit ticks at intervals of 50
+  const yTicks = [];
+  for (let i = yMin; i <= yMax; i += 50) {
+    yTicks.push(i);
+  }
 
-    const plotWidth = svgWidth - paddingLeft - paddingRight;
-    const plotHeight = svgHeight - paddingY * 2;
-
-    const points = values.map((v, i) => {
-        const x = paddingLeft + (i * plotWidth) / Math.max(values.length - 1, 1);
-        const t = (v - minVal) / Math.max(maxVal - minVal, 1);
-        const y = paddingY + (1 - t) * plotHeight;
-        return [x, y];
-    });
-
-    const pathD = points.map((p, i) => `${i === 0 ? "M" : "L"} ${p[0].toFixed(2)} ${p[1].toFixed(2)}`).join(" ");
-
-    const containerRef = useRef<HTMLDivElement | null>(null);
-    const btnRefs = useRef<Array<HTMLButtonElement | null>>([]);
-    const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number }>({ left: 0, width: 0 });
-
-    const viewIndex = view === "overall" ? 0 : view === "rw" ? 1 : 2;
-
-    const updateIndicator = () => {
-        const container = containerRef.current;
-        const btn = btnRefs.current[viewIndex];
-        if (!container || !btn) return;
-        const cRect = container.getBoundingClientRect();
-        const bRect = btn.getBoundingClientRect();
-        setIndicatorStyle({ left: bRect.left - cRect.left, width: bRect.width });
-    };
-
-    useLayoutEffect(() => {
-        updateIndicator();
-        window.addEventListener("resize", updateIndicator);
-        return () => window.removeEventListener("resize", updateIndicator);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [view]);
-
-    return (
-        <div className="rounded-3xl bg-white pt-5 pb-5 pl-6 pr-6">
-            <div className="flex items-center justify-between mb-2">
-                <h2 className="text-[20px] font-bold tracking-tight text-[#1D1D1F]">Mock Test Performance</h2>
-                {/* Toggle group with sliding active background */}
-                <div ref={containerRef} className="relative inline-flex bg-neutral-100 rounded-full p-1">
-                    {/* sliding active indicator (measured) */}
-                    <div
-                        aria-hidden
-                        className="absolute bg-[#2563EB] rounded-full transition-all duration-300 ease-in-out"
-                        style={{ left: indicatorStyle.left, width: indicatorStyle.width, top: 6, bottom: 6 }}
-                    />
-                    <button ref={(el) => (btnRefs.current[0] = el)} onClick={() => setView("overall")} className={cn("relative z-10 px-2 py-1 text-sm font-medium rounded-full transition-colors flex-1 text-center", view === "overall" ? "text-white" : "text-[#5b616a]")}>Overall</button>
-                    <button ref={(el) => (btnRefs.current[1] = el)} onClick={() => setView("rw")} className={cn("relative z-10 px-2 py-1 text-sm font-medium rounded-full transition-colors flex-1 text-center", view === "rw" ? "text-white" : "text-[#5b616a]")}>R&W</button>
-                    <button ref={(el) => (btnRefs.current[2] = el)} onClick={() => setView("math")} className={cn("relative z-10 px-2 py-1 text-sm font-medium rounded-full transition-colors flex-1 text-center", view === "math" ? "text-white" : "text-[#5b616a]")}>Math</button>
-                </div>
+  return (
+    <div className="bg-white rounded-[24px] p-6 shadow-sm hover:shadow-md transition-shadow border border-slate-100 h-full">
+      <div className="flex flex-col h-full">
+        <div className="flex flex-col lg:flex-row gap-8 flex-1">
+          <div className="flex-1 min-h-[200px] flex flex-col">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-[#1D1D1F]">Mock Test Performance</h2>
+              <div className="flex bg-[#f7faff] p-1 rounded-full">
+                {["Overall", "R&W", "Math"].map((tab) => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                      activeTab === tab ? "bg-brand-blue text-white shadow-sm" : "text-[#75757A] hover:text-[#1D1D1F]"
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
             </div>
 
-                <div>
-                    {tests.length === 0 ? (
-                        <div className="text-sm text-muted-foreground p-6">No mock tests completed yet.</div>
-                    ) : (
-                        <div className="overflow-x-auto">
-                            <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} width="100%" height={svgHeight} className="block">
-                                {/* grid lines + y-axis labels */}
-                                {[0, 0.25, 0.5, 0.75, 1].map((g, idx) => {
-                                    const y = paddingY + g * plotHeight;
-                                    const val = Math.round(maxVal - g * (maxVal - minVal));
-                                    return (
-                                        <g key={idx}>
-                                            <line x1={paddingLeft} x2={svgWidth - paddingRight} y1={y} y2={y} stroke="#f1f5f9" strokeWidth={1} />
-                                            <text x={12} y={y + 4} fontSize={11} fill="#6b7280" textAnchor="start">{val}</text>
-                                        </g>
-                                    );
-                                })}
-
-                                {/* path */}
-                                <path d={pathD} fill="none" stroke="#2563EB" strokeWidth={2.5} strokeLinejoin="round" strokeLinecap="round" />
-
-                                {/* points */}
-                                {points.map((p, i) => (
-                                    <circle key={i} cx={p[0]} cy={p[1]} r={3} fill="#1D4ED8" />
-                                ))}
-
-                                {/* x labels */}
-                                {tests.map((t, i) => (
-                                    <text key={i} x={points[i][0]} y={svgHeight - 6} textAnchor="middle" fontSize={10} fill="#6b7280">{new Date(t.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</text>
-                                ))}
-                            </svg>
+            <ResponsiveContainer width="100%" height={240}>
+              <LineChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F0F0F0" />
+                <XAxis 
+                  dataKey="date" 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{ fill: '#75757A', fontSize: 12 }}
+                  dy={10}
+                  padding={{ left: 30, right: 30 }}
+                />
+                <YAxis 
+                  domain={[yMin, yMax]} 
+                  ticks={yTicks}
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{ fill: '#75757A', fontSize: 12 }}
+                />
+                <Tooltip 
+                  cursor={{ stroke: '#E5E7EB', strokeWidth: 1 }}
+                  position={{ x: 0, y: 0 }} // Lock the wrapper physically to the origin
+                  content={({ active, payload, label, coordinate }) => {
+                    if (active && payload && payload.length && coordinate) {
+                      const score = payload[0].value as number;
+                      // Calculate exact pixel Y height based on dynamic domain.
+                      // Chart area is 230px tall (240px height - 10px top margin).
+                      const pointY = 10 + ((yMax - score) / (yMax - yMin)) * 230;
+                      
+                      return (
+                        <div 
+                          className="bg-white p-3 shadow-lg border-none rounded-xl flex flex-col items-center min-w-[100px] absolute z-50 pointer-events-none transition-all duration-300 ease-out"
+                          style={{ 
+                            top: `${pointY}px`,
+                            left: `${coordinate.x}px`,
+                            transform: 'translate(-50%, calc(-100% - 40px))'
+                          }}
+                        >
+                          <p className="text-sm font-bold text-[#1D1D1F]">{label}</p>
+                          <p className="text-xs text-brand-blue font-medium">
+                            {activeTab}: {score}
+                          </p>
+                          {/* Triangle pointer */}
+                          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[99%] w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-white" />
                         </div>
-                    )}
+                      );
+                    }
+                    return null;
+                  }}
+                  allowEscapeViewBox={{ x: true, y: true }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey={activeKey}
+                  stroke="#3B82F6"
+                  strokeWidth={3}
+                  dot={{ r: 4, fill: "#3B82F6", strokeWidth: 2, stroke: "#fff" }}
+                  activeDot={{ r: 6, strokeWidth: 0 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="w-px bg-slate-100 hidden md:block" />
+
+          <div className="w-full md:w-72 flex flex-col">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-[#1D1D1F]">Past Records</h3>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                className="text-sm text-[#75757A] hover:text-brand-blue hover:bg-transparent transition-colors gap-1 px-1"
+                onClick={() => navigate("/mock-tests")}
+              >
+                Take test <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+            <div className="flex flex-col gap-4">
+              {mockRecords.map((record) => (
+                <div key={record.id} className="p-4 rounded-2xl border border-slate-50 bg-[#f7faff] flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-[#1D1D1F]">{record.name}</p>
+                    <p className="text-xs text-[#75757A]">{record.date}</p>
+                  </div>
+                  <Button size="sm" className="bg-brand-blue hover:bg-brand-blue/90 rounded-full px-6">
+                    Review
+                  </Button>
                 </div>
+              ))}
+            </div>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default MockTestPerformance;
