@@ -75,7 +75,7 @@ const Index = () => {
             </section>
 
             {/* Feature Grid - "Bento" Style */}
-            <section className="py-24 px-6 bg-secondary/30 relative">
+            <section className="py-24 px-6 bg-white relative">
                 <div className="max-w-7xl mx-auto">
                     <motion.div
                         initial={{ opacity: 0, y: 40 }}
@@ -85,20 +85,20 @@ const Index = () => {
                         className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8"
                     >
                         {/* Card 1: Question Bank (Row 1 Left - Width 2) */}
-                        <div className="bg-background rounded-[2.5rem] p-8 md:p-10 border-2 border-brand-black shadow-sm transition-all duration-200 group md:col-span-2 relative overflow-hidden hover:scale-105 hover:shadow-xl">
+                        <div className="bg-slate-100 text-slate-900 rounded-[2.5rem] p-8 md:p-10 shadow-sm transition-all duration-200 group md:col-span-2 relative overflow-hidden hover:scale-105 hover:shadow-xl">
                              {/* Removed gradient background */}
                              
                              <div className="flex flex-col md:flex-row items-center gap-8 h-full relative z-10">
                                 <div className="flex-1 md:flex-[1.4]">
                                     <h3 className="text-3xl font-serif font-medium mb-3">1000+ Highly-Realistic Questions</h3>
-                                    <p className="text-lg text-muted-foreground">Get access to a  growing library of SAT questions generated using our state-of-the-art AI models.</p>
+                                    <p className="text-lg text-slate-600">Get access to a  growing library of SAT questions generated using our state-of-the-art AI models.</p>
                                 </div>
                                 <div className="flex-1 w-full max-w-xs">
                                    <div className="relative h-48 w-full overflow-hidden mask-gradient-b">
                                    <div className="absolute top-0 left-0 w-full flex flex-col gap-1.5 opacity-80">
                                       {/* Visual Representation of Question List */}
                                       <motion.div 
-                                        className="bg-secondary/100 p-3.5 rounded-xl flex items-center gap-3"
+                                        className="bg-white p-3.5 rounded-xl flex items-center gap-3 shadow-sm border border-slate-200"
                                         style={{ willChange: "transform" }}
                                         animate={{ y: [0, -4, 0] }}
                                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -110,7 +110,7 @@ const Index = () => {
                                           </div>
                                       </motion.div>
                                       <motion.div 
-                                        className="bg-secondary/100 p-3.5 rounded-xl flex items-center gap-3"
+                                        className="bg-white p-3.5 rounded-xl flex items-center gap-3 shadow-sm border border-slate-200"
                                         style={{ willChange: "transform" }}
                                         animate={{ y: [0, -4, 0] }}
                                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
@@ -122,7 +122,7 @@ const Index = () => {
                                           </div>
                                       </motion.div>
                                       <motion.div 
-                                        className="bg-secondary/100 p-3.5 rounded-xl flex items-center gap-3"
+                                        className="bg-white p-3.5 rounded-xl flex items-center gap-3 shadow-sm border border-slate-200"
                                         style={{ willChange: "transform" }}
                                         animate={{ y: [0, -4, 0] }}
                                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 2 }}
@@ -139,9 +139,9 @@ const Index = () => {
                         </div>
 
                          {/* Card 2: Progress Tracker (Row 1 Middle - Width 1) */}
-                        <div className="bg-background rounded-[2.5rem] p-8 md:p-10 border-2 border-brand-black shadow-sm transition-all duration-200 group relative overflow-hidden md:col-span-1 hover:scale-105 hover:shadow-xl">
+                        <div className="bg-slate-100 text-slate-900 rounded-[2.5rem] p-8 md:p-10 shadow-sm transition-all duration-200 group relative overflow-hidden md:col-span-1 hover:scale-105 hover:shadow-xl">
                              <h3 className="text-2xl font-serif font-medium mb-3">Progress Tracker</h3>
-                             <p className="text-base text-muted-foreground mb-6">
+                             <p className="text-base text-slate-600 mb-6">
                                  Visualize your progress, strengths, and weaknesses
                              </p>
                              
@@ -172,7 +172,7 @@ const Index = () => {
                                     transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
                                  ></motion.div>
                                  <motion.div 
-                                    className="w-1/5 bg-brand-blue rounded-t-sm shadow-[0_0_15px_rgba(44,140,219,0.5)] h-full origin-bottom"
+                                    className="w-1/5 bg-brand-blue rounded-t-sm h-full origin-bottom"
                                     style={{ willChange: "transform" }}
                                     animate={{ scaleY: [0.9, 0.95, 0.85, 1, 0.9] }}
                                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }}
@@ -181,13 +181,13 @@ const Index = () => {
                         </div>
 
                         {/* Card 5: Exam Simulator (Row 1 Right - Width 1, Height 2) */}
-                        <div className="bg-white text-slate-900 rounded-[2.5rem] p-8 md:p-10 border-2 border-brand-black shadow-sm transition-all duration-200 group relative overflow-hidden flex flex-col md:col-span-1 md:row-span-2 hover:scale-105 hover:shadow-xl">
+                        <div className="bg-slate-100 text-slate-900 rounded-[2.5rem] p-8 md:p-10 shadow-sm transition-all duration-200 group relative overflow-hidden flex flex-col md:col-span-1 md:row-span-2 hover:scale-105 hover:shadow-xl">
                              <div className="relative z-10 flex-1 flex flex-col">
                                 <h3 className="text-3xl font-serif font-medium mb-4">1:1 Exam Simulator</h3>
-                                <p className="text-lg text-muted-foreground mb-8">
+                                <p className="text-lg text-slate-600 mb-8">
                                     Experience test day pressure with our realistic interface
                                 </p>
-                                <div className="mt-auto w-full transform bg-slate-50 rounded-2xl shadow-lg p-5 rotate-3 group-hover:rotate-0 transition-transform duration-500 border border-slate-100 origin-center scale-100">
+                                <div className="mt-auto w-full transform bg-white text-slate-900 rounded-2xl shadow-lg p-5 rotate-3 group-hover:rotate-0 transition-transform duration-500 border border-slate-200 origin-center scale-100">
                                     <div className="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
                                         <div className="text-[10px] font-bold text-slate-400 tracking-wider">R&W • MODULE 2</div>
                                         <div className="text-xs font-mono font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded">4:45</div>
@@ -226,37 +226,37 @@ const Index = () => {
                         </div>
 
                          {/* Card 3: Socials (Row 2 Left - Width 1) */}
-                         <div className="bg-background rounded-[2.5rem] p-8 md:p-10 border-2 border-brand-black shadow-sm transition-all duration-200 group relative overflow-hidden md:col-span-1 hover:scale-105 hover:shadow-xl">
+                         <div className="bg-slate-100 text-slate-900 rounded-[2.5rem] p-8 md:p-10 shadow-sm transition-all duration-200 group relative overflow-hidden md:col-span-1 hover:scale-105 hover:shadow-xl">
                             <div className="flex items-center justify-between mb-6">
-                                <div className="p-3 bg-secondary rounded-2xl">
+                                <div className="p-3 bg-white rounded-2xl border border-slate-200 shadow-sm">
                                     <Users className="w-6 h-6 text-brand-blue" />
                                 </div>
                             </div>
                             <h3 className="text-2xl font-serif font-medium mb-3">Social Learning</h3>
-                            <p className="text-base text-muted-foreground mb-6">
+                            <p className="text-base text-slate-600 mb-6">
                                 See friends' progress and compete on the leaderboard
                             </p>
                             <div className="flex -space-x-3 mt-auto pt-4 isolate">
                                 <motion.div 
-                                    className="w-10 h-10 rounded-full border-2 border-background bg-slate-200 flex items-center justify-center text-xs font-medium relative z-40"
+                                    className="w-10 h-10 rounded-full border-2 border-slate-100 bg-slate-200 flex items-center justify-center text-xs font-medium text-slate-900 relative z-40"
                                     style={{ willChange: "transform" }}
                                     animate={{ y: [0, -5, 0] }}
                                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0 }}
                                 >JD</motion.div>
                                 <motion.div 
-                                    className="w-10 h-10 rounded-full border-2 border-background bg-blue-100 flex items-center justify-center text-xs font-medium text-brand-blue relative z-30"
+                                    className="w-10 h-10 rounded-full border-2 border-slate-100 bg-blue-100 flex items-center justify-center text-xs font-medium text-brand-blue relative z-30"
                                     style={{ willChange: "transform" }}
                                     animate={{ y: [0, -5, 0] }}
                                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
                                 >AS</motion.div>
                                 <motion.div 
-                                    className="w-10 h-10 rounded-full border-2 border-background bg-purple-100 flex items-center justify-center text-xs font-medium text-purple-600 relative z-20"
+                                    className="w-10 h-10 rounded-full border-2 border-slate-100 bg-purple-100 flex items-center justify-center text-xs font-medium text-purple-600 relative z-20"
                                     style={{ willChange: "transform" }}
                                     animate={{ y: [0, -5, 0] }}
                                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                                 >MK</motion.div>
                                 <motion.div 
-                                    className="w-10 h-10 rounded-full border-2 border-background bg-secondary flex items-center justify-center text-xs font-medium text-muted-foreground relative z-10"
+                                    className="w-10 h-10 rounded-full border-2 border-slate-100 bg-white flex items-center justify-center text-xs font-medium text-slate-600 relative z-10"
                                     style={{ willChange: "transform" }}
                                     animate={{ y: [0, -5, 0] }}
                                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
@@ -265,11 +265,11 @@ const Index = () => {
                          </div>
 
                          {/* Card 4: Targeted Practice (Row 2 Middle - Width 2) */}
-                         <div className="bg-white text-slate-900 rounded-[2.5rem] p-8 md:p-10 border-2 border-brand-black shadow-sm transition-all duration-200 flex flex-col justify-between relative overflow-hidden group md:col-span-2 hover:scale-105 hover:shadow-xl">
+                         <div className="bg-slate-100 text-slate-900 rounded-[2.5rem] p-8 md:p-10 shadow-sm transition-all duration-200 flex flex-col justify-between relative overflow-hidden group md:col-span-2 hover:scale-105 hover:shadow-xl">
                                <div className="relative z-10 flex flex-col items-start h-full justify-between">
                                    <div>
-                                       <h3 className="text-3xl font-serif font-medium text-black mb-4">Targeted Practice</h3>
-                                       <p className="text-muted-foreground leading-relaxed max-w-sm">
+                                       <h3 className="text-3xl font-serif font-medium mb-4">Targeted Practice</h3>
+                                       <p className="text-slate-600 leading-relaxed max-w-sm">
                                            Choose exactly which types of questions to practice. Filter by specific domains, skills, or themes
                                        </p>
                                    </div>
@@ -286,7 +286,7 @@ const Index = () => {
                                             ].concat([
                                                 "Inferences", "Command of Evidence", "Central Ideas and Details", "Words in Context", "Text Structure and Purpose", "Standard English Conventions", "Rhetorical Synthesis", "Transitions", "Form, Structure, and Sense", "Boundaries"
                                             ])).map((skill, i) => (
-                                                <div key={i} className="px-3 py-1.5 rounded-md bg-slate-100 text-xs border border-slate-200 text-slate-700 shrink-0">
+                                                <div key={i} className="px-3 py-1.5 rounded-md bg-white text-xs border border-slate-200 text-slate-700 shrink-0 shadow-sm">
                                                     {skill}
                                                 </div>
                                             ))}
@@ -303,7 +303,7 @@ const Index = () => {
                                             ].concat([
                                                 "Psychology", "Economics", "Sociology", "Political Science", "Biology", "Physics", "Classic Fiction", "Visual Arts", "Philosophy", "Earth Science"
                                             ])).map((topic, i) => (
-                                                <div key={i} className="px-3 py-1.5 rounded-md bg-slate-100 text-xs border border-slate-200 text-slate-700 shrink-0">
+                                                <div key={i} className="px-3 py-1.5 rounded-md bg-white text-xs border border-slate-200 text-slate-700 shrink-0 shadow-sm">
                                                     {topic}
                                                 </div>
                                             ))}

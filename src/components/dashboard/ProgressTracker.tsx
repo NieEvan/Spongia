@@ -2,6 +2,7 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useQuestionStats } from "@/hooks/useQuestions";
 import { useProgressStats } from "@/hooks/useProgress";
+import { RecentPractices } from "./RecentPractices";
 
 const domainColors: Record<string, string> = {
   "Information and Ideas": "bg-domain-ideas",
@@ -32,49 +33,30 @@ export const ProgressTracker = ({ compact = false }: { compact?: boolean }) => {
 
   return (
     <div className={cn(
-      "rounded-3xl bg-white h-full pt-5 pb-5 pl-6 pr-6",
+      "rounded-[24px] bg-white h-full pt-6 pb-6 pl-6 pr-6 shadow-sm border border-slate-100 flex flex-col justify-between",
       compact ? "" : ""
     )}>
-      {/* Header Row */}
-      <div className="mb-4 flex items-start justify-between">
-        <div>
-          <h2 className="text-[20px] font-bold tracking-tight text-[#1D1D1F]">Your Progress</h2>
-          <p className="text-sm text-[#75757A] mt-1">{headerMessage}</p>
+      <div>
+        {/* Header Row */}
+        <div className="mb-4 flex items-start justify-between">
+          <div>
+            <h2 className="text-[20px] font-bold tracking-tight text-[#1D1D1F]">Your Progress</h2>
+            <p className="text-sm text-[#75757A] mt-1">{headerMessage}</p>
+          </div>
+          <div className="text-right">
+            <div className={compact ? "text-2xl font-bold text-[#1D1D1F]" : "text-4xl font-bold text-[#1D1D1F]"}>{progressPercent}%</div>
+            <p className={compact ? "text-xs text-[#75757A]" : "text-sm text-[#75757A]"}>Complete</p>
+          </div>
         </div>
-        <div className="text-right">
-          <div className={compact ? "text-2xl font-bold text-[#1D1D1F]" : "text-4xl font-bold text-[#1D1D1F]"}>{progressPercent}%</div>
-          <p className={compact ? "text-xs text-[#75757A]" : "text-sm text-[#75757A]"}>Complete</p>
-        </div>
+
+        {/* Main Progress Bar */}
+        <Progress value={progressPercent} className={compact ? "mb-2 h-1.5 bg-[#f5f5f7]" : "h-2 bg-[#f5f5f7]"} />
       </div>
 
-      {/* Main Progress Bar */}
-      <Progress value={progressPercent} className={compact ? "mb-2 h-1.5 bg-[#f5f5f7]" : "h-2 bg-[#f5f5f7]"} />
-
-      {/* Stats Row */}
-      <div className={compact ? "mt-3 grid grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-5" : "mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5"}>
-        <div>
-          <p className="text-xs text-muted-foreground">Questions</p>
-          <p className={compact ? "text-lg font-bold text-[#1d1d1f]" : "text-2xl font-bold text-[#1d1d1f]"}>{totalQuestions}</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Attempted</p>
-          <p className={compact ? "text-lg font-bold text-[#1d1d1f]" : "text-2xl font-bold text-[#1d1d1f]"}>{progressStats.attempted}</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Accuracy</p>
-          <p className={compact ? "text-lg font-bold text-[#1d1d1f]" : "text-2xl font-bold text-[#1d1d1f]"}>{progressStats.accuracy}%</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Mastered</p>
-          <p className={compact ? "text-lg font-bold text-green-600" : "text-2xl font-bold text-green-600"}>{progressStats.mastered}</p>
-        </div>
-        <div>
-          <p className="text-xs text-muted-foreground">Needs Work</p>
-          <p className={compact ? "text-lg font-bold text-red-600" : "text-2xl font-bold text-red-600"}>{progressStats.needsWork}</p>
-        </div>
+      {/* Embedded Skills Section horizontally placed beneath progress bar */}
+      <div className="mt-8 pt-4 border-t border-slate-50">
+        <RecentPractices />
       </div>
-
-      {/* Domain progress bars removed as per UI update */}
     </div>
   );
 };

@@ -1,10 +1,10 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 import { ProgressTracker } from "@/components/dashboard/ProgressTracker";
-import { RecentPractices } from "@/components/dashboard/RecentPractices";
 import { ProfileCard } from "@/components/dashboard/ProfileCard";
 import { FriendsCard } from "@/components/dashboard/FriendsCard";
 import { ActivityCalendar } from "@/components/dashboard/ActivityCalendar";
 import MockTestPerformance from "@/components/dashboard/MockTestPerformance";
+import { GoalCard } from "@/components/dashboard/GoalCard";
 
 const Dashboard = () => {
    return (
@@ -21,9 +21,14 @@ const Dashboard = () => {
                   </div>
 
                   {/* TOP SECTION */}
-                  {/* Top Left: Progress Tracker (compact on dashboard) */}
-                  <div className="lg:col-span-2 lg:h-full">
-                     <ProgressTracker />
+                  {/* Top Left: Progress Tracker and Goal (compact on dashboard) */}
+                  <div className="lg:col-span-2 lg:h-full grid grid-cols-1 md:grid-cols-5 gap-6">
+                     <div className="md:col-span-3">
+                        <ProgressTracker />
+                     </div>
+                     <div className="md:col-span-2">
+                        <GoalCard />
+                     </div>
                   </div>
 
                   {/* Top Right: Profile */}
@@ -33,26 +38,16 @@ const Dashboard = () => {
                      </div>
                   </div>
 
-                  {/* Middle Section: Skills + Activity */}
-                  {/* Skills (left two columns) */}
+                  {/* Middle Section: Mock Test + Activity */}
                   <div className="lg:col-span-2">
-                     <RecentPractices />
+                      <MockTestPerformance />
                   </div>
 
-                  {/* Activity (right column, aligned with skills) */}
-                  <div className="">
+                  {/* Activity & Social vertically grouped to align neatly alongside MockTest in the right column */}
+                  <div className="flex flex-col gap-8">
                      <ActivityCalendar />
+                     <FriendsCard />
                   </div>
-
-                           {/* Mock Test Performance (aligned with social block horizontally) */}
-                           <div className="lg:col-span-2">
-                               <MockTestPerformance />
-                           </div>
-
-                           {/* Social (below activity) */}
-                           <div className="lg:col-start-3">
-                              <FriendsCard />
-                           </div>
                </div>
             </div>
             </div>
